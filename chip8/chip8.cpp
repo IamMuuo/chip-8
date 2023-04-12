@@ -1,17 +1,31 @@
+/**
+ * This file is part of CHIP8
+ * 
+ * Developed By Erick Muuo
+ * Email: hearteric57@gmail.com
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+*/
+
 #include "chip8.hpp"
 #include <cstdlib>
+#include <cstring>
 #include <ctime>
 #include <fstream>
 
 #define START_ADDRESS 0x200
 #define FONTSET_START_ADDRESS 0x50
 
-// contains implementation of various fuctions
-// to be used by the chip8 class
-
+/**
+ * Initializes the CHIP8 simulator
+ * Sets the program counter to 0x200
+ * Loads fonts to memory
+ * Initializes the randByte
+ */
 Chip8::Chip8() {
-  // set the program counter to 0x200 so it starts executing
-  // from there
 
   programCounter = START_ADDRESS;
 
@@ -46,6 +60,10 @@ Chip8::Chip8() {
   randByte = rand() % 255;
 }
 
+/**
+ * Loads a ROM into memory
+ * @param filename a valid path to the ROM to be loaded
+ */
 void Chip8::loadROM(const char *filename) {
   // open the file and navigate to end
   std::ifstream file(filename, std::ios::binary | std::ios::ate);
@@ -69,4 +87,44 @@ void Chip8::loadROM(const char *filename) {
     // delete the buffer
     delete[] buffer;
   }
+}
+
+// the instruction sets
+
+/**
+ * Clears the video buffer setting each pixel to zero
+ */
+void Chip8::OP_00E0() { memset(video, 0, sizeof(video)); }
+
+/**
+ * RET
+ * Returns from a subroutine
+ */
+void Chip8::OP_00EE() {
+  --stackPointer;
+  programCounter = stack[stackPointer];
+}
+
+/**
+ * JUMP ADDR
+ * Jumpts to the location nnn
+ */
+void Chip8::OP_1nnn() {
+  // A jump does not remember its origin so no stack interaction is
+  // not required
+
+  uint16_t address = opcode & 0x0FFFu;
+  programCounter = address;
+}
+
+/**
+ * CALL ADDR
+ * Calls the subroutine at nnn
+ */
+void Chip8::OP_2nnn() {
+  uint16_t address = opcode & 0x0FFFu;
+
+  stack[stackPointer] = programCounter;
+  ++stackPointer;
+  programCounter = address;
 }

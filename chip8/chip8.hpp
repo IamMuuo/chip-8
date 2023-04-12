@@ -1,12 +1,15 @@
-/**********************************************************************
- * (C) Copyright 2023
- * All rights reserved
- *
- * Author: Erick Muuo
- *
- * Project Chip8
- *
- * *******************************************************************/
+/**
+ * This file is part of CHIP8
+ * 
+ * Developed By Erick Muuo
+ * Email: hearteric57@gmail.com
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+*/
+
 #include <cstdint>
 // A class to represent the chip8 core architecture
 
@@ -33,7 +36,14 @@ public:
 
   uint8_t randByte;
 
-  // Member functions
+
   Chip8();
-  void loadROM(const char *);
+  void loadROM(const char *filename);
+
+
+  void OP_00E0();   // clears the video buffer
+  void OP_00EE();   // Returns from a subroutine..
+  void OP_1nnn();   // Jumps from one address to another
+  void OP_2nnn();   // Calls the subroutine at nnn
+
 };
