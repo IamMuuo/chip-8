@@ -16,8 +16,8 @@
 #include <ctime>
 #include <fstream>
 
-#define START_ADDRESS 0x200
-#define FONTSET_START_ADDRESS 0x50
+const uint16_t START_ADDRESS  = 0x200;
+const uint16_t FONTSET_START_ADDRESS = 0x50;
 
 /**
  * Initializes the CHIP8 simulator
@@ -127,4 +127,49 @@ void Chip8::OP_2nnn() {
   stack[stackPointer] = programCounter;
   ++stackPointer;
   programCounter = address;
+}
+
+/**
+ * Skips the next instruction if Vx==kk
+*/
+void Chip8::OP_3xkk()
+{
+  uint8_t Vx = (opcode & 0xF00u) >> 8u;
+  uint8_t byte = opcode & 0x00FFu;
+
+  if (registers[Vx] == byte)
+  {
+    programCounter += 2;
+  }
+  
+}
+
+/**
+ * Skip the next instruction is Vx == Vy
+ * 
+*/
+void Chip8::OP_3xkk()
+{
+  uint8_t Vx = (opcode & 0xF00u) >> 8u;
+  uint8_t byte = opcode & 0x00FFu;
+
+  if (registers[Vx] == byte)
+  {
+    programCounter += 2;
+  }
+  
+}
+
+/**
+ * Skips the next instruction if Vx != kk
+*/
+void Chip8::OP_4xkk()
+{
+  uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+  uint8_t byte = opcode & 0x00FFu;
+
+  if (registers[Vx] != byte)
+  {
+    programCounter += 2;
+  }
 }

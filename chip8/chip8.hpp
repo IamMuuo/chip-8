@@ -45,5 +45,7 @@ public:
   void OP_00EE();   // Returns from a subroutine..
   void OP_1nnn();   // Jumps from one address to another
   void OP_2nnn();   // Calls the subroutine at nnn
+  void OP_3xkk();   // Skips the next instruction if Vx == kk
+  void OP_4xkk();   // Skips the next instruction if Vx != kk
 
 };

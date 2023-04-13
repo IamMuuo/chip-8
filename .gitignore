@@ -39,3 +39,6 @@
 
 # Build directory
 /build
+
+# .gitignore
+/.vscode
