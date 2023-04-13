@@ -130,21 +130,6 @@ void Chip8::OP_2nnn() {
 }
 
 /**
- * Skips the next instruction if Vx==kk
-*/
-void Chip8::OP_3xkk()
-{
-  uint8_t Vx = (opcode & 0xF00u) >> 8u;
-  uint8_t byte = opcode & 0x00FFu;
-
-  if (registers[Vx] == byte)
-  {
-    programCounter += 2;
-  }
-  
-}
-
-/**
  * Skip the next instruction is Vx == Vy
  * 
 */
